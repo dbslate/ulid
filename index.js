@@ -78,17 +78,21 @@ function _prng(root) {
   if (root) {
     try {
       var crypto = root.crypto || root.msCrypto
-      return function() {
+      var getRandomViaCryptoBuiltin = function() {
         return crypto.getRandomValues(new Uint16Array(1))[0] / 0xFFFF
-      }
+      };
+      getRandomViaCryptoBuiltin(); // call once to make sure it works, ensuring proper fallback
+      return getRandomViaCryptoBuiltin;
     }
     catch (e) {}
   } else {
     try {
       var crypto = require("crypto")
-      return function() {
+      var getRandomViaCryptoRequire = function() {
         return crypto.randomBytes(2).readUInt16LE() / 0xFFFF
-      }
+      };
+      getRandomViaCryptoRequire(); // call once to make sure it works, ensuring proper fallback
+      return getRandomViaCryptoRequire;
     }
     catch (e) {}
   }
