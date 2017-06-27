@@ -98,7 +98,7 @@ function _prng(root) {
   }
 
   if (typeof prng !== "function") {
-    if (typeof console !== "undefined" && console.warn) {
+    if (typeof console !== "undefined" && console.warn && process.env.NODE_ENV === 'development') {
       console.warn("[ulid] crypto not usable, falling back to insecure Math.random()");
     }
     return function() {
